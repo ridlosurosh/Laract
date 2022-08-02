@@ -5,7 +5,7 @@ import { Head } from '@inertiajs/inertia-react';
 export default function Homepage(props) { 
     console.log(props);
     return (
-        <div className='flex justify-center items-center min-h-screen'>
+        <div className='flex items-center justify-center min-h-screen text-2xl text-white bg-neutral-800'>
             <Head title={props.title} />
             <p>{props.deskripsi}</p>
             {props.news ? props.news.map((data, i) => {
