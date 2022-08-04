@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Berita;
 use Illuminate\Http\Request;
+use App\Http\Resources\BeritaCollection;
 
 use function Termwind\render;
 
@@ -17,7 +18,7 @@ class BeritaController extends Controller
      */
     public function index()
     {
-        $berita = Berita::all();
+        $berita = new BeritaCollection(Berita::paginate(8));
         return Inertia::render('Homepage', [
             'title' => 'Laract Homepage',
             'deskripsi' => 'Selamat Datang Di Laract Homepage',

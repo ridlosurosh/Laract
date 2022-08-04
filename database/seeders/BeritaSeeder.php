@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Berita;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+
 
 class BeritaSeeder extends Seeder
 {
@@ -15,13 +17,6 @@ class BeritaSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=0; $i < 20; $i++) { 
-            DB::table('beritas')->insert([
-                'judul' => fake()->title(),
-                'deskripsi' => fake()->paragraph(2, true),
-                'kategori' => fake()->sentence(),
-                'pengarang' => fake()->email(),
-            ]);
-        }
+        Berita::factory(50)->create();
     }
 }
