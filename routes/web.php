@@ -17,15 +17,11 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [BeritaController::class, 'index']);
-
-Route::get('/welcome', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::post('/berita', [BeritaController::class, 'store'])->middleware(['auth', 'verified'])->name('buat.berita');
+Route::get('/berita', [BeritaController::class, 'show'])->middleware(['auth', 'verified'])->name('berita.ku');
+Route::get('/berita/edit', [BeritaController::class, 'edit'])->middleware(['auth', 'verified'])->name('edit.berita');
+Route::post('/berita/update', [BeritaController::class, 'update'])->middleware(['auth', 'verified'])->name('update.berita');
+Route::post('/berita/delete', [BeritaController::class, 'destroy'])->middleware(['auth', 'verified'])->name('hapus.berita');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

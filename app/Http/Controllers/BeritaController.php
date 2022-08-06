@@ -18,7 +18,7 @@ class BeritaController extends Controller
      */
     public function index()
     {
-        $berita = new BeritaCollection(Berita::paginate(8));
+        $berita = new BeritaCollection(Berita::OrderByDesc('id')->paginate(8));
         return Inertia::render('Homepage', [
             'title' => 'Laract Homepage',
             'deskripsi' => 'Selamat Datang Di Laract Homepage',
@@ -44,7 +44,13 @@ class BeritaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $berita = new Berita();
+        $berita->judul = $request->judul;
+        $berita->deskripsi = $request->deskripsi;
+        $berita->kategori = $request->kategori;
+        $berita->pengarang = auth()->user()->email;
+        $berita->save();
+        return redirect()->back()->with('message', 'Berita berhasil dibuat');
     }
 
     /**
@@ -55,7 +61,10 @@ class BeritaController extends Controller
      */
     public function show(Berita $berita)
     {
-        //
+        $myNews = $berita::where('pengarang', auth()->user()->email)->get();
+        return Inertia::render('Dashboard', [
+            'myNews' => $myNews,
+        ]);
     }
 
     /**
@@ -64,9 +73,11 @@ class BeritaController extends Controller
      * @param  \App\Models\Berita  $berita
      * @return \Illuminate\Http\Response
      */
-    public function edit(Berita $berita)
+    public function edit(Berita $berita, Request $request)
     {
-        //
+        return Inertia::render('EditBerita', [
+            'BeritaKu' => $berita->find($request->id)
+        ]);
     }
 
     /**
@@ -76,9 +87,14 @@ class BeritaController extends Controller
      * @param  \App\Models\Berita  $berita
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Berita $berita)
+    public function update(Request $request)
     {
-        //
+        Berita::where('id', $request->id)->update([
+            'judul' => $request->judul,
+            'deskripsi' => $request->deskripsi,
+            'kategori' => $request->kategori
+        ]);
+        return to_route('dashboard');
     }
 
     /**
@@ -87,8 +103,10 @@ class BeritaController extends Controller
      * @param  \App\Models\Berita  $berita
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Berita $berita)
+    public function destroy(Request $request)
     {
-        //
+        $berita = Berita::find($request->id);
+        $berita->delete();
+        return redirect()->back()->with('message', 'berita berhasil dihapus');
     }
 }
